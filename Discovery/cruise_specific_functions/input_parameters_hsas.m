@@ -72,6 +72,11 @@ DIN_Non_Linearity = [MAIN_DIR "HyperSAS_config/Non-linearity/"];
 NL_files_pre = {"Pre/cp_radcal_SAT2027.txt", "Pre/cp_radcal_SAT2054.txt", "Pre/cp_radcal_SAT0464.txt"};
 NL_files_post = {"Post/cp_radcal_SAT2027.txt", "Post/cp_radcal_SAT2054.txt", "Post/cp_radcal_SAT0464.txt"};
 
+# -Flags to check if do non-linearity, temperature, Straylight corrections
+FLAG_NON_LINEARITY = 0; % 0: do not apply correction, 1: apply correction
+FLAG_TEMPERATURE = 0;
+FLAG_STRAY_LIGHT = 0;
+
 
 #-ACS data Path
 # FN_ACS = [MAIN_DIR, "ACSChl/ACStoHSAS_sentinel3a_olci_AMT29.txt"]; - commented out for now; is this ACS-derived chl?
