@@ -2,15 +2,6 @@
 
 # HSAS callibrate is based on FICE 2022 depolyment. It replaces proc0_prepare_calibration.m and proc1_calibrate.m from thet
 
-
-
-% Modifications for FICE 2022 by tjor:
-
-# (i)  Calibration applies to stations rather than days.
-# (ii) Non-linearity correction now implemented in correct_non_linearity_at_Cal_FICE.m (accomodates new data format from Tartu).
-# (iii) Straylight correction has been modified to take Linear Spread Function matrix (L), from which straylight matrix D_SL in derived
-# previous input was via D_SL directly)
- 
  
 clear all
 close all
