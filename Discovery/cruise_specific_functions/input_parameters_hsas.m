@@ -1,31 +1,34 @@
 # this is a script that contains all (I hope) the variables parameters for each cruise
 
-
-
+# DY151 version is based on adding relavant sections of FICE HSAS code (which contains new sensor configuration) 
+# with Discovery branch of AMT code
 
 
 #Turn off/on verbose reporting
 	VBS = true;
 
 # year of dataset (e.g., 2019)
-	DEF_YEAR = xxxx;
+	DEF_YEAR = 2022;
 	
 # cruise name (e.g., AMT29)
-	CRUISE = "AMTxx";
+	CRUISE = "DY151";
 
-# HSAS instruments serial numbers
-	INSTRUMENT = "hsas";
-	radiometers = {"ES", "LI", "LT"}; % "LT"#  (similar instrument must be listed one after the other)
-	sn = {"258", "222", "223"};%"464",
-	file_ext = {"H[ES][DE]", "*H[LS][DL]", "*H[LS][DL]"}; %"*H[LS][DL]", # wildcards to read files for each instrument
-	cal_files_pre = {"HSE258.cal", "HSL222.cal", "HSL223.cal"}; %"HSL464.cal",
-
+# HSAS instruments serial numbers - these are for 2022 deployments onwards
+        INSTRUMENT = "hsas";
+	radiometers = {"ES", "LI", "LT"};#  (similar instrument must be listed one after the other)
+	sn = {"2027", "2054", "464"};
+	file_ext = {"H[ES][DE]", "*H[LS][DL]", "*H[LS][DL]", "SAT"}; # wildcards to read files for each instrument
+	cal_files_pre = {"SAT2027.cal", "SAT2054.cal", "SAT464.cal"};
+	cal_files_post = {"SAT2027.cal", "SAT2054.cal", "SAT464.cal"};
 
 # Set wavelength range
    wv = [350:2:860]';  #Consistent with JRC format
 
 # main dir (e.g., /data/datasets/cruise_data/active/AMT29)
-MAIN_DIR = "The path of the data you will process";   
+MAIN_DIR = "/data/datasets/cruise_data/active/DY151";   
+
+DIN_HSAS = [MAIN_DIR "Hypersas/Raw/RawExtracted/"]; 
+DOUT_HSAS = [MAIN_DIR "Hypersas/Processed/"];
 
 ### INSTRUMENT serial numbers for trios (at least) are hardcoded
 ### SINGLE HARDCODED PATH REMAINS TO THS DATA BELOW AND DEF_YEAR IS HARDCODED ###
@@ -34,42 +37,44 @@ OSX = 0;
 # main directories
 % DOUT_SUFFIX = "../Processed_final/"; # this is the supphix that is appended to the DATA_PATH dir to define the directory for the output processed files
 
-DIR_GPS = [MAIN_DIR "Ship_uway/GPS/"];
-GLOB_GPS = "*-position-Applanix_GPS_DY1.gps";
+DIR_GPS = [MAIN_DIR "Data/Ship_uway/GPS/"]; # updated for DY151 GPS and ATT file names
+GLOB_GPS = '*position-POSMV_GPS*';
 
-DIR_ATT = [MAIN_DIR "Ship_uway/ATT/"]; # pitch and roll
-GLOB_ATT = "*-shipattitude-Applanix_TSS_DY1.att";
+DIR_ATT = [MAIN_DIR "Data/Ship_uway/ATT/"]; # pitch and roll
+GLOB_ATT = '*shipattitude-POSMV_ATT.att*';
 
-DIR_WIND = [MAIN_DIR "Ship_uway/SURFMETV3/"];
-GLOB_WIND = "*MET*.SURFMETv3";# glob pattern for Discovery wind data to concatenate after DATESTR
+DIR_WIND = [MAIN_DIR "Data/Ship_uway/SURFMETV3/"];
+GLOB_WIND = "*MET*.SURFMETv3"; # glob pattern for Discovery wind data to concatenate after DATESTR
 
-DIR_SURF = [MAIN_DIR "Ship_uway/SURFMETV3/"];
-GLOB_SURF = "*MET*.SURFMETv3";# glob pattern for wind data to concatenate after DATESTR
-
-DIR_TEMPCORR = [MAIN_DIR "HyperSAS_config/Temperature/"];
-FN_TEMPCORR_ES = "PML_8-010-20-thermal-0258.csv";# File name of temperature correction factors and their uncertainties for ES
-FN_TEMPCORR_LT = "PML_8-010-20-thermal-0223.csv";
-FN_TEMPCORR_LI = "PML_8-010-20-thermal-0222.csv";
-
-DIR_SLCORR = [MAIN_DIR "HyperSAS_config/Straylight/"];
-FN_SLCORR_ES = "258.txt";# File name of Straylight correction factors for ES
-FN_SLCORR_LT = "223.txt";
-FN_SLCORR_LI = "222.txt";
-
-DIN_HSAS = [MAIN_DIR "Raw/RawExtracted/"];
-DOUT_HSAS = [MAIN_DIR "Processed/"];
+DIR_SURF = [MAIN_DIR "Data/Ship_uway/SURFMETV3/"];
+GLOB_SURF = "*MET*.SURFMETv3"; # glob pattern for wind data to concatenate after DATESTR
 
 
-DIR_CAL = [MAIN_DIR "HyperSAS_config/"];
+DIR_TEMPCORR = [MAIN_DIR "Hypersas/HyperSAS_config/Temperature/"]; # 
+FN_TEMPCORR_ES = "cp_thermal_SAT2027.txt"; # File name of temperature correction factors 
+FN_TEMPCORR_LT = "cp_thermal_SAT2054.txt"
+FN_TEMPCORR_LI = "cp_thermal_SAT0464.txt"
+
+DIR_SLCORR = [MAIN_DIR "Hypersas/HyperSAS_config/Straylight/"];
+FN_SLCORR_ES = "cp_straylight_SAT2027.txt"; # File names of Straylight correction
+FN_SLCORR_LT = "cp_straylight_SAT0464.txt";
+FN_SLCORR_LI = "cp_straylight_SAT2054.txt";
+
+DIR_CAL = [MAIN_DIR "Hypersas/HyperSAS_config/"];
+DIN_CALS_PRE = [DIR_CAL "Pre/"];
+DIN_CALS_POST = [DIR_CAL "Post/"];
+
+DIR_CAL = [MAIN_DIR "Hypersas/HyperSAS_config/"];
 DIN_CALS_PRE = [MAIN_DIR "HyperSAS_config/Pre/"];
 DIN_CALS_POST = [MAIN_DIR "HyperSAS_config/Post/"]; 
-DIN_StrayLight = [MAIN_DIR "HyperSAS_config/Straylight/"];
-DIN_Non_Linearity = [MAIN_DIR "HyperSAS_config/Non-linearity/non-linearity coefficients.xlsx"]; 
+
+DIN_Non_Linearity = [MAIN_DIR "HyperSAS_config/Non-linearity/"]; 
+NL_files_pre = {"Pre/cp_radcal_SAT2027.txt", "Pre/cp_radcal_SAT2054.txt", "Pre/cp_radcal_SAT0464.txt"};
+NL_files_post = {"Post/cp_radcal_SAT2027.txt", "Post/cp_radcal_SAT2054.txt", "Post/cp_radcal_SAT0464.txt"};
 
 
 #-ACS data Path
-FN_ACS = [MAIN_DIR, "ACSChl/ACStoHSAS_sentinel3a_olci_AMT29.txt"];
-
+# FN_ACS = [MAIN_DIR, "ACSChl/ACStoHSAS_sentinel3a_olci_AMT29.txt"]; - commented out for now; is this ACS-derived chl?
 
 # Define names of functions needed to read GPS, HDG, PITCH, ROLL, TILT
 FNC_RD_ATT = @rd_DY_att;# function to read ptitch and roll 
@@ -92,7 +97,7 @@ FILTERING  = 'continuous'; # 	L1_f = hsas_filter_sensors_using_Lt_data_v2(L1_f, 
 % DIR_SHIP = "/data/datasets/cruise_data/active/AMT24/Ship_data/Compress/Compress/days/";
 #
 # base dir fir L1 files
-DIN_L1 = [MAIN_DIR "Processed/L1/"];
+DIN_L1 = [MAIN_DIR "Hypersas/Processed/L1/"];
 #
 # maximum tilt accepted 
 MAX_TILT = 5; # [degrees]
