@@ -1,5 +1,8 @@
 # read hsas digital counts and apply calibration coefficients
 
+# HSAS callibrate is based on FICE 2022 depolyment. It replaces proc0_prepare_calibration.m and proc1_calibrate.m from thet
+
+
 
 % Modifications for FICE 2022 by tjor:
 
@@ -28,6 +31,18 @@ addpath(strcat(pwd, "/rad_functions/DISTRIB_fQ_with_Raman/D_foQ_pa"))
 
 # read input parameters for this cruise
 input_parameters_hsas;
+
+#
+fnin = argv();
+disp(fnin)
+
+disp('----------------------------------------------------------------------------------------------------------');
+disp(fnin{1});
+disp('----------------------------------------------------------------------------------------------------------');
+fflush(stdout);
+
+DATESTR = fnin{1};
+#
 
 ## these are the dirs containig the PRE and POST cals 
 	if isempty(DIN_CALS_POST) 
@@ -282,26 +297,12 @@ for iSN = 1:length(sn)
 
 		
 	###### calibrate data from this instrument
-	days = glob([DIN_HSAS "2022*"]); # read all days (stations for fice 2022)
-	istart = min(find(cellfun(@isempty, strfind(days, DAY_START))==0)); # find first day (station) to be processed
-	istop = max(find(cellfun(@isempty, strfind(days, DAY_STOP))==0)); # find last day (station) to be processed
-	
-	
-	if isempty(istart) | isempty(istop)
-		disp('cannot find start or stop day');
-		keyboard
-	endif
-
+ # these are the files to process
+	fn = glob([DIN_HSAS DATESTR "/" "*" sn{iSN} ".dat"]);
+    disp(fn)
  
 	
-	# loop over the days that need to be processed
-	for iday = istart:istop
-		
-		sday = strsplit(days{iday}, '/'){end}; # extract date string 
-		# these are the files to process
-        	fn = glob([DIN_HSAS sday "/*" sn{iSN} "*.dat"]);
-
-	        for ifn = 1:length(fn)
+	for ifn = 1:length(fn)
         
 				disp(sprintf("%u/%u", ifn, length(fn)));
 				fflush(stdout);
@@ -340,11 +341,8 @@ for iSN = 1:length(sn)
 					disp(["Written calibrated file: " fnout]);
 					fflush(stdout);
 					
-	        endfor # fn
-      
-	  
-	endfor # days
-	    
+        endfor # fn
+          
 
 endfor # sn
 
