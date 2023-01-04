@@ -1,0 +1,1 @@
+function B = fit(X,Y)X=X(:);Y=Y(:);SX=sum(X);SXOSS=SX/length(X);T=X-SXOSS;T2=T .* T;ST2=sum(T2);TY=T .* Y;STY=sum(TY);B=STY/ST2;
